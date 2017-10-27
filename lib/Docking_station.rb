@@ -9,9 +9,21 @@ class DockingStation
     @available = []
   end
 
+  def releasing
+    @available.each do |bike|
+      if bike.working?
+        bici = bike
+        @available.delete(bike)
+        return bici
+      end
+    end
+    nil
+  end
+
   def release_bike
-    raise "There are no bikes docked" unless empty?
-    @available.pop
+    bike = releasing
+    return bike unless bike.nil?
+    raise "There are no bikes docked"
   end
 
   def dock(bike)
@@ -21,11 +33,17 @@ class DockingStation
     end
 
 
+  def report_broken
+    true
+  end
+
+
   def capacity
     @available.length
   end
 
   private
+
 
   def full?
     @limit_capacity <= capacity
@@ -34,5 +52,7 @@ class DockingStation
   def empty?
     capacity > 0 ? true:false
   end
+
+
 
 end
